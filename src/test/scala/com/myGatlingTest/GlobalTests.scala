@@ -14,7 +14,7 @@ class GlobalTests extends Simulation {
 
   val scn = scenario("Global Test")
     .exec(session => {
-      println(s" Run jenkins")
+      println(s" Run jenkins 2")
       val matricule = java.util.UUID.randomUUID().toString.take(8)
       session.set("matricule", matricule)
 
