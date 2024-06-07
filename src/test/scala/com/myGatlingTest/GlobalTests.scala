@@ -1,54 +1,40 @@
 package com.myGatlingTest
 
+
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+import scala.concurrent.duration._
 
 class GlobalTests extends Simulation {
 
   val httpProtocol = http
-    .baseUrl("http://localhost:8091")
+    .baseUrl("http://spring-app:8091")
     .header("Content-Type", "application/json")
-  var counter = 1
-  val scn = scenario("Global Test")
-
-    .exec(session => {
-
-      val matricule = java.util.UUID.randomUUID().toString.take(8)
-
-      session.set("matricule", matricule)
 
 
-    })
-    .exec(session => {
-      counter+= 1
-      session.set("id",counter.toString)
-    })
-
-
+  val scn = scenario("Post Product")
     .exec(
       http("Create Product")
-        .post("/products")
+        .post("/api/products")
         .body(StringBody(
-          session =>
-            s"""{
-               |"matricule":"${session("matricule").as[String]}",
-               |"name":"Sample Product",
-               |"description":"This is a sample product.",
-               |"image":"https://example.com/sample-product-image.jpg",
-               |"discount":10,
-               |"price":99.99,
-               |"stock":100,
-               |"vendingType":"AVENDRE",
-               |"active":true
-               |}""".stripMargin)).asJson
+          """{
+            |"matricule":"PROD001",
+            |"name":"Sample Product",
+            |"description":"This is a sample product.",
+            |"image":"https://example.com/sample-product-image.jpg",
+            |"discount":10,
+            |"price":99.99,
+            |"stock":100,
+            |"vendingType":"AVENDRE",
+            |"active":true
+            |}""".stripMargin)).asJson
         .check(status.is(200))
     ).pause(1)
     .exec(
       http("Create Command")
-        .post("/commands")
+        .post("/api/commands")
         .body(StringBody(
-          session =>
-          s"""{
+          """{
             |  "shippingAddress": "123 Main St",
             |  "method": "Express",
             |  "confirmed": true,
@@ -59,8 +45,8 @@ class GlobalTests extends Simulation {
             |  "productCommands": [
             |    {
             |      "product": {
-            |       "id": ${session("id").as[String]},
-            |        "matricule": "${session("matricule").as[String]}",
+            |        "id": 1,
+            |        "matricule": "PROD001",
             |        "name": "Sample Product",
             |        "description": "This is a sample product.",
             |        "image": "https://example.com/sample-product-image.jpg",
@@ -80,7 +66,9 @@ class GlobalTests extends Simulation {
         .check(status.is(201))
     )
 
+
+
   setUp(
-    scn.inject(atOnceUsers(500))
+    scn.inject(atOnceUsers(1000))
   ).protocols(httpProtocol)
 }
