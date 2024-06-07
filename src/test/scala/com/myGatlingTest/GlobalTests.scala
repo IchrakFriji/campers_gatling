@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 class GlobalTests extends Simulation {
 
   val httpProtocol = http
-    .baseUrl("http://localhost:8091")
+    .baseUrl("http://172.20.10.8:8091")
     .header("Content-Type", "application/json")
 
 
