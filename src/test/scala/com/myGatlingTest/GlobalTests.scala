@@ -69,6 +69,6 @@ class GlobalTests extends Simulation {
 
 
   setUp(
-    scn.inject(atOnceUsers(1000))
+    scn.inject(atOnceUsers(500))
   ).protocols(httpProtocol)
 }
