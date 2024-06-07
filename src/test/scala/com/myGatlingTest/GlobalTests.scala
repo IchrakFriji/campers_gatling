@@ -15,7 +15,7 @@ class GlobalTests extends Simulation {
   val scn = scenario("Post Product")
     .exec(
       http("Create Product")
-        .post("/api/products")
+        .post("/products")
         .body(StringBody(
           """{
             |"matricule":"PROD001",
@@ -32,7 +32,7 @@ class GlobalTests extends Simulation {
     ).pause(1)
     .exec(
       http("Create Command")
-        .post("/api/commands")
+        .post("/commands")
         .body(StringBody(
           """{
             |  "shippingAddress": "123 Main St",
