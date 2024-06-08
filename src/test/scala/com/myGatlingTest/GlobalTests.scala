@@ -26,7 +26,7 @@ class GlobalTests extends Simulation {
     })
     .exec(
       http("Create Product")
-        .post("/products")
+        .post("/api/products")
         .body(StringBody(
           session =>
             s"""{
@@ -44,7 +44,7 @@ class GlobalTests extends Simulation {
     ).pause(1)
     .exec(
       http("Create Command")
-        .post("/commands")
+        .post("/api/commands")
         .body(StringBody(
           session =>
             s"""{
